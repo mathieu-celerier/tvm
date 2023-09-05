@@ -58,11 +58,11 @@ public:
   BasicLinearFunction(const utils::AffineExpr<CstDerived, Derived...> & aff);
 
   /** Set the matrix \p A corresponding to variable \p x and optionally the
-   * properties \p p of \p A.*/
+   * properties \p p of \p A. */
   virtual void A(const MatrixConstRef & A, const Variable & x, const tvm::internal::MatrixProperties & p = {});
   /** Shortcut for when there is a single variable.*/
   virtual void A(const MatrixConstRef & A, const tvm::internal::MatrixProperties & p = {});
-  /** Set the constant term \p b, and optionally its properties \p p.*/
+  /** Set the constant term \p b, and optionally its properties \p p. */
   virtual void b(const VectorConstRef & b, const tvm::internal::MatrixProperties & p = {});
 
   using LinearFunction::b;

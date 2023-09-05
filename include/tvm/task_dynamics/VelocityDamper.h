@@ -148,6 +148,7 @@ public:
     bool autoXsi_;
     Eigen::VectorXd d_;
     Eigen::VectorXd axsi_; // a * xsi = -xsi / (di - ds)
+    Eigen::VectorXd lambda_; // xsi / [4*(di - ds)] = -axsi/4
     std::vector<bool> active_;
   };
 

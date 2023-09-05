@@ -195,6 +195,7 @@ VelocityDamper::Impl::Impl(FunctionPtr f,
   {
     axsi_.setOnes();
     xsiOff_ = resizeParameter(f, xsi, "damping offset parameter");
+    lambda_ = Eigen::VectorXd::Zero(f->size());
   }
   else
   {
@@ -239,6 +240,7 @@ void VelocityDamper::Impl::updateValue_(double s)
       {
         active_[static_cast<size_t>(i)] = true;
         axsi_[i] = a_[i] * (s * dv[i] * (ds_[i] - di_[i]) / (d_[i] - ds_[i]) + xsiOff_[i]);
+        lambda_[i] = -axsi_[i]/4.0;
       }
       else if(d_[i] > di_[i] && active_[static_cast<size_t>(i)])
       {

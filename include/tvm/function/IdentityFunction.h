@@ -14,7 +14,7 @@ namespace function
 class TVM_DLLAPI IdentityFunction : public BasicLinearFunction
 {
 public:
-  /** Build an identity function on variable \p x*/
+  /** Build an identity function on variable \p x */
   IdentityFunction(VariablePtr x);
 
 protected:
