@@ -164,7 +164,8 @@ VelocityDamper::Impl::Impl(FunctionPtr f,
                            double big)
 : TaskDynamicsImpl(Order::One, f, t, rhs), dt_(0), ds_(resizeParameter(f, ds, "safety distance")),
   di_(resizeParameter(f, di, "interaction distance")), xsiOff_(0), a_(-(di_ - ds_).cwiseInverse()), big_(big),
-  autoXsi_(autoXsi), d_(f->size()), axsi_(f->size()), active_(f->size(), false)
+  autoXsi_(autoXsi), d_(f->size()), axsi_(f->size()), lambda_(Eigen::VectorXd::Zero(f->size())),
+  active_(f->size(), false)
 {
   if(autoXsi)
   {
@@ -189,13 +190,13 @@ VelocityDamper::Impl::Impl(FunctionPtr f,
                            double big)
 : TaskDynamicsImpl(Order::Two, f, t, rhs), dt_(dt), ds_(resizeParameter(f, ds, "safety distance")),
   di_(resizeParameter(f, di, "interaction distance")), xsiOff_(0), a_(-(di_ - ds_).cwiseInverse()), big_(big),
-  autoXsi_(autoXsi), d_(f->size()), axsi_(f->size()), active_(f->size(), false)
+  autoXsi_(autoXsi), d_(f->size()), axsi_(f->size()), lambda_(Eigen::VectorXd::Zero(f->size())),
+  active_(f->size(), false)
 {
   if(autoXsi)
   {
     axsi_.setOnes();
     xsiOff_ = resizeParameter(f, xsi, "damping offset parameter");
-    lambda_ = Eigen::VectorXd::Zero(f->size());
   }
   else
   {
@@ -240,7 +241,7 @@ void VelocityDamper::Impl::updateValue_(double s)
       {
         active_[static_cast<size_t>(i)] = true;
         axsi_[i] = a_[i] * (s * dv[i] * (ds_[i] - di_[i]) / (d_[i] - ds_[i]) + xsiOff_[i]);
-        lambda_[i] = -axsi_[i]/4.0;
+        lambda_[i] = -axsi_[i] / 4.0;
       }
       else if(d_[i] > di_[i] && active_[static_cast<size_t>(i)])
       {
